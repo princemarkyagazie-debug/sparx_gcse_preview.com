@@ -1,172 +1,44 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>
-      Among Us Play Online
-    </title>
-    <meta name="description" content="Play Among Us online and be the only survivor on the ship! As the imposter, deceive and kill the spaceship crew and sabotage their mission!" />
-    <meta name="keywords" content="among us play online" />
-    <meta property="og:title" content="Among Us Play Online" />
-    <meta property="og:image" content="https://amongusplay.online/share.png" />
-    <meta property="og:description" content="Play Among Us online and be the only survivor on the ship!" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-    <link rel="icon" type="image/png" href="favicon.png" />
-    <link rel="stylesheet" href="style.css?v3" />
-    <link rel="stylesheet" href="style-menu.css?v7" />
-    <script async="" src="//api.adinplay.com/libs/aiptag/pub/TPZ/amongusplay.online/tag.min.js">
-    </script>
-    <script src="netapi26.js">
-    </script>
-    <meta http-equiv="pragma" content="no-cache" />
-    <meta http-equiv="cache-control" content="no-cache" />
-  </head>
-  <body>
-    <div id="gameadsbanner">
-    </div>
-    <script type="text/javascript">
-      (function(g,a,m,e,A,d,s){g[A]=g[A]||function(){(g[A].s=g[A].s||[]).push(arguments)};
-g[A].l=1*new Date();d=a.createElement(&#34;script&#34;),s=a.getElementsByTagName(&#34;script&#34;)[0],d.async=1,d.src=e+&#34;?objid=&#34;+m+&#34;&amp;jsdate=&#34;+(+new Date())+&#34;&amp;lang=&#34;+g.navigator.language+&#34;&amp;rfunc=&#34;+A+&#34;&amp;fromhost=&#34;+g.location.hostname+&#34;&amp;refr=&#34;+encodeURIComponent(a.referrer)+&#34;&amp;fromurl=&#34;+encodeURIComponent(g.location.href)+&#34;&#34;,s.parentNode.insertBefore(d,s)})
-(window, document, &#34;gameadsbanner&#34;, &#34;https://n.gameads.io/getcode&#34;, &#34;GameAdsRenew&#34;);
-    </script>
-    <div id="leaderboard">
-    </div>
-    <div id="shareBlock">
-      <a class="shareBtn" href="#invite" onclick="ShowInvite();">      INVITE FRIENDS
-</a>
-      <script src="https://yastatic.net/share2/share.js" async="">
-      </script>
-      <div class="ya-share2" data-curtain="" data-lang="en" data-url="https://amongusplay.online/" data-services="facebook,twitter">
-      </div>
-    </div>
-    <script type="text/javascript">
-      console.log(&#39;v177-adinplay-only&#39;);
-    </script>
-    <div id="preroll">
-    </div>
-    <div id="amongusplay-online_970x250">
-    </div>
-    <div id="about">
-      <div class="modal_box">
-        <h1>
-          Among Us Online
-        </h1>
-        <div class="modal_scroll">
-          <p>
-            Something went wrong on the spaceship. There is a traitor in the ranks who wants to quietly bring down everyone else.
-          </p>
-          <p>
-            Anything goes: attacking other crew members, sabotage and deception. There is no other way if you want to survive. If the traitor is caught red-handed, he will be thrown into outer space to his death. Be resourceful and cunning, because YOU are the imposter!
-          </p>
-          <p>
-            The online version of the Among Us game is a modern reincarnation of the well-known game Mafia.
-          </p>
-          <h2>
-            Among us controls
-          </h2>
-          <p>
-            WASD or cursor keys - move around the spacecraft.
-            <br />
-            Attack, ventilation, sabotage, and report buttons are at the bottom right corner of the screen.
-          </p>
-        </div>
-        <p>
-          <a href="#aboutclose" onclick="HideAbout();">          Close window
-</a>
-        </p>
-      </div>
-    </div>
-    <script type="text/javascript">
-      window.player_id = 1220902683;
-		window.player_name = &#39;Player&#39;;
-		function ShowInvite() {
-				var ab = document.getElementById(&#39;shareInvite&#39;);
-				if (ab.style.display === &#39;block&#39;) {
-					HideInvite();
-				} else {
-					ab.style.display = &#39;block&#39;;
-				}
-			}
-
-			function HideInvite() {
-				var ab = document.getElementById(&#39;shareInvite&#39;);
-				ab.style.display = &#39;none&#39;;
-			}
-			
-			function inviteCopyLink() {
-  var copyText = document.getElementById(&#34;shareLinkInput&#34;);
-  copyText.select();
-  document.execCommand(&#34;copy&#34;);
-}
-    </script>
-    <div id="shareInvite" style="display: none;">
-      <div class="shareInvite-text">
-        <span class="inviteTitle">        Invite Friends
-</span>
-        <p>
-          Share the link with more friends!
-        </p>
-        <input type="text" value="amongusplay.online/?go-4650" id="shareLinkInput" />
-        <button onclick="inviteCopyLink();HideInvite();">
-          Copy
-        </button>
-        <p>
-          <a href="#invite" onclick="HideInvite();">          Close Window
-</a>
-        </p>
-      </div>
-    </div>
-    <div id="bottom">
-      <a href="#about" onclick="ShowAbout()">      About game
-</a>
-      <a href="/privacy.php" target="_blank">      Privacy policy
-</a>
-      <a href="/partners/" target="_blank">      Partners
-</a>
-      <a href="https://kevin.games/?referer=amongusplay.online" target="_blank">      More Games
-</a>
-    </div>
-    <div id="fb-root">
-    </div>
-    <noscript>
-      &lt;div id=&#34;notSupportedWrap&#34;&gt;
-			&lt;h2 id=&#34;notSupportedTitle&#34;&gt;This content requires JavaScript&lt;/h2&gt;
-			&lt;p class=&#34;notSupportedMessage&#34;&gt;JavaScript appears to be disabled. Please enable it to view this content.&lt;/p&gt;
-		&lt;/div&gt;
-    </noscript>
-    <script src="scripts/supportcheck.js?v3">
-    </script>
-    <script src="scripts/offlineclient.js?v2" type="module">
-    </script>
-    <script src="scripts/main.js?v2" type="module">
-    </script>
-    <script src="scripts/register-sw.js?v2" type="module">
-    </script>
-    <script>
-      (function(i,s,o,g,r,a,m){i[&#39;GoogleAnalyticsObject&#39;]=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,&#39;script&#39;,&#39;https://www.google-analytics.com/analytics.js&#39;,&#39;ga&#39;);
-
-      ga(&#39;create&#39;, &#39;UA-185206636-1&#39;, &#39;auto&#39;);
-      ga(&#39;send&#39;, &#39;pageview&#39;);
-    </script>
-    <!-- Yandex.Metrika counter -->
-    <script type="text/javascript">
-      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-   m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-   (window, document, &#34;script&#34;, &#34;https://mc.yandex.ru/metrika/tag.js&#34;, &#34;ym&#34;);
-
-   ym(70167805, &#34;init&#34;, {
-        clickmap:true,
-        trackLinks:true,
-        accurateTrackBounce:true
-   });
-    </script>
-    <noscript>
-      &lt;div&gt;&lt;img src=&#34;https://mc.yandex.ru/watch/70167805&#34; style=&#34;position:absolute; left:-9999px;&#34; alt=&#34;&#34; /&gt;&lt;/div&gt;
-    </noscript>
-    <!-- /Yandex.Metrika counter -->
-  </body>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Play a small Among Us-style game in your browser.">
+  <title>Among Us - Mini Game</title>
+  <style>
+    :root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#111827;color:#f8fafc;display:grid;place-items:center}main{width:min(960px,100%);padding:12px;text-align:center}h1{font-size:clamp(1.4rem,4vw,2.2rem);margin:.3rem 0}.hint{color:#cbd5e1;margin:.25rem 0 .8rem}.game-wrap{position:relative;margin:auto;width:min(900px,100%);aspect-ratio:16/9;background:#020617;border:2px solid #475569;border-radius:12px;overflow:hidden;box-shadow:0 12px 35px #0008}canvas{display:block;width:100%;height:100%;touch-action:none}.hud{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:.65rem auto;max-width:900px}.pill,button{border:1px solid #64748b;border-radius:999px;background:#1e293b;color:#fff;padding:.55rem .85rem;font:inherit}.pill{flex:1;min-width:120px}button{cursor:pointer;background:#2563eb;border-color:#60a5fa}button:hover{filter:brightness(1.15)}.controls{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}.modal{position:fixed;inset:0;background:#000b;display:grid;place-items:center;padding:18px}.modal[hidden]{display:none}.card{max-width:520px;background:#1e293b;border:1px solid #64748b;border-radius:14px;padding:20px;text-align:left}.card h2{margin-top:0}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}@media(max-width:520px){.game-wrap{aspect-ratio:4/3}.hint{font-size:.9rem}}
+  </style>
+</head>
+<body>
+<main>
+  <h1>Among Us: Mini Mission</h1>
+  <p class="hint">Move with <b>WASD</b> or the arrow keys. Complete every task and avoid the impostor.</p>
+  <div class="game-wrap"><canvas id="game" aria-label="Playable mini game"></canvas></div>
+  <div class="hud"><span class="pill" id="tasks">Tasks: 0 / 3</span><span class="pill" id="status" role="status">Playing</span><span class="pill" id="score">Time: 0s</span></div>
+  <div class="controls"><button id="restart" type="button">Restart</button><button id="aboutBtn" type="button">How to play</button><button id="inviteBtn" type="button">Copy invite link</button></div>
+</main>
+<div class="modal" id="about" hidden><div class="card" role="dialog" aria-modal="true" aria-labelledby="aboutTitle"><h2 id="aboutTitle">How to play</h2><p>Finish the three glowing tasks. The red impostor chases you, so keep moving. Touch a task to complete it. If the impostor catches you, restart the mission.</p><button id="closeAbout" type="button">Close</button></div></div>
+<script>
+(() => {
+  'use strict';
+  const canvas=document.getElementById('game'),ctx=canvas.getContext('2d'),tasksEl=document.getElementById('tasks'),statusEl=document.getElementById('status'),scoreEl=document.getElementById('score');
+  const keys=new Set(); let raf=0,last=0,started=0,ended=false,won=false;
+  const player={x:80,y:80,r:14,speed:190}; const impostor={x:0,y:0,r:16,speed:58};
+  let tasks=[],elapsed=0;
+  const walls=[{x:.25,y:.15,w:.12,h:.32},{x:.62,y:.08,w:.12,h:.3},{x:.42,y:.58,w:.2,h:.12},{x:.08,y:.7,w:.2,h:.12}];
+  function resize(){const d=devicePixelRatio||1,r=canvas.getBoundingClientRect();canvas.width=Math.max(1,r.width*d);canvas.height=Math.max(1,r.height*d);ctx.setTransform(d,0,0,d,0,0)}
+  function W(){return canvas.clientWidth} function H(){return canvas.clientHeight}
+  function blocked(x,y,r){return x-r<0||y-r<0||x+r>W()||y+r>H()||walls.some(w=>x+r>w.x*W()&&x-r<(w.x+w.w)*W()&&y+r>w.y*H()&&y-r<(w.y+w.h)*H())}
+  function reset(){cancelAnimationFrame(raf); player.x=W()*.12;player.y=H()*.5;impostor.x=W()*.82;impostor.y=H()*.5;tasks=[{x:.18,y:.18,done:false},{x:.78,y:.75,done:false},{x:.52,y:.25,done:false}];elapsed=0;started=performance.now();ended=won=false;statusEl.textContent='Playing';draw();raf=requestAnimationFrame(loop)}
+  function move(o,dx,dy){const nx=o.x+dx,ny=o.y+dy;if(!blocked(nx,o.y,o.r))o.x=nx;if(!blocked(o.x,ny,o.r))o.y=ny}
+  function loop(now){const dt=Math.min((now-last)/1000,.05);last=now;if(!ended){elapsed=(now-started)/1000;let dx=(keys.has('ArrowRight')||keys.has('d')?1:0)-(keys.has('ArrowLeft')||keys.has('a')?1:0),dy=(keys.has('ArrowDown')||keys.has('s')?1:0)-(keys.has('ArrowUp')||keys.has('w')?1:0);const n=Math.hypot(dx,dy)||1;move(player,dx/n*player.speed*dt,dy/n*player.speed*dt);const d=Math.hypot(player.x-impostor.x,player.y-impostor.y)||1;move(impostor,(player.x-impostor.x)/d*impostor.speed*dt,(player.y-impostor.y)/d*impostor.speed*dt);tasks.forEach(t=>{if(!t.done&&Math.hypot(player.x-t.x*W(),player.y-t.y*H())<30)t.done=true});if(tasks.every(t=>t.done)){won=ended=true;statusEl.textContent='Mission complete!'}else if(Math.hypot(player.x-impostor.x,player.y-impostor.y)<player.r+impostor.r){ended=true;statusEl.textContent='Caught by the impostor'}updateHud()}draw();if(!ended)raf=requestAnimationFrame(loop)}
+  function updateHud(){tasksEl.textContent=`Tasks: ${tasks.filter(t=>t.done).length} / ${tasks.length}`;scoreEl.textContent=`Time: ${Math.floor(elapsed)}s`}
+  function draw(){const w=W(),h=H();ctx.clearRect(0,0,w,h);ctx.fillStyle='#0f172a';ctx.fillRect(0,0,w,h);ctx.strokeStyle='#1e3a5f';ctx.lineWidth=2;for(let x=0;x<w;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}for(let y=0;y<h;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}walls.forEach(a=>{ctx.fillStyle='#334155';ctx.fillRect(a.x*w,a.y*h,a.w*w,a.h*h)});tasks.forEach(t=>{ctx.beginPath();ctx.arc(t.x*w,t.y*h,12,0,Math.PI*2);ctx.fillStyle=t.done?'#22c55e':'#facc15';ctx.fill();ctx.strokeStyle='#fff';ctx.stroke()});dot(player.x,player.y,player.r,'#38bdf8');dot(impostor.x,impostor.y,impostor.r,'#ef4444');if(ended){ctx.fillStyle='#000b';ctx.fillRect(0,0,w,h);ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font='bold 28px system-ui';ctx.fillText(won?'YOU WIN':'GAME OVER',w/2,h/2);ctx.font='16px system-ui';ctx.fillText('Press Restart to play again',w/2,h/2+32)}}
+  function dot(x,y,r,c){ctx.fillStyle=c;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff8';ctx.beginPath();ctx.arc(x-r*.35,y-r*.35,r*.25,0,Math.PI*2);ctx.fill()}
+  addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','w','a','s','d'].includes(e.key))e.preventDefault();keys.add(e.key)});addEventListener('keyup',e=>keys.delete(e.key));addEventListener('resize',()=>{resize();reset()});document.getElementById('restart').onclick=reset;
+  const about=document.getElementById('about');document.getElementById('aboutBtn').onclick=()=>about.hidden=false;document.getElementById('closeAbout').onclick=()=>about.hidden=true;about.onclick=e=>{if(e.target===about)about.hidden=true};document.getElementById('inviteBtn').onclick=async()=>{const text=location.href;if(navigator.clipboard)await navigator.clipboard.writeText(text);else{const i=document.createElement('input');i.value=text;document.body.append(i);i.select();document.execCommand('copy');i.remove()}statusEl.textContent='Invite link copied'};
+  resize();reset();
+})();
+</script>
+</body>
 </html>
-
