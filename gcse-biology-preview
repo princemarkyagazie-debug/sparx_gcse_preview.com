@@ -5,85 +5,41 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>GCSE Biology Preview</title>
 <style>
-:root{--bg:#0d1117;--panel:#171d25;--panel2:#1f2730;--line:#3a4755;--text:#edf3f8;--muted:#b8c2ce;--accent:#9de5ff;--ok:#9be3ad;--warn:#f7d783;--danger:#ff9ea0}
-*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}body{padding:24px}main{max-width:1100px;margin:0 auto}.toolbar,.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.toolbar{margin:16px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;margin-top:16px}.muted{color:var(--muted)}input,textarea,button{font:inherit}input[type=text],textarea{width:100%;color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:9px}textarea{min-height:360px;resize:vertical;margin-top:8px}button{color:var(--text);background:#287a9d;border:0;border-radius:6px;padding:9px 13px;cursor:pointer}button.alt{background:var(--panel2);border:1px solid var(--line)}button:disabled{opacity:.5;cursor:not-allowed}.url-row{display:grid;grid-template-columns:1fr auto;gap:10px}.patch-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}.patch-item:last-child{border-bottom:0}.patch-item small{display:block;color:var(--muted)}.toggle{color:var(--muted);font-size:13px}.status{white-space:pre-wrap;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px;margin-top:16px}.status.error{color:var(--danger)}.search-results{margin-top:10px}.snippet,.empty{color:var(--muted);padding:9px 0;border-bottom:1px solid var(--line);overflow-wrap:anywhere}.snippet mark{background:var(--warn);color:#111} @media(max-width:760px){.grid{grid-template-columns:1fr}.url-row{grid-template-columns:1fr}}
+:root{--bg:#f5f7fb;--panel:#fff;--line:#e2e7ef;--text:#202124;--muted:#68758a;--blue:#1a73e8;--green:#188038;--red:#d93025;--yellow:#f9ab00}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font:14px/1.5 Arial,system-ui,sans-serif}button,input,textarea{font:inherit}button{cursor:pointer}
+.topbar{height:58px;padding:16px 28px;display:flex;justify-content:flex-end;gap:20px;color:var(--muted);font-size:13px}.topbar a{color:inherit;text-decoration:none}.topbar a:hover{text-decoration:underline}
+main{max-width:1080px;margin:auto;padding:20px 20px 55px}.logo{display:flex;justify-content:center;margin:15px 0 22px;font-size:clamp(48px,8vw,78px);font-weight:700;letter-spacing:-7px;line-height:1}.logo span{display:inline-block}.blue{color:var(--blue)}.red{color:var(--red)}.yellow{color:var(--yellow)}.green{color:#34a853}
+.search{max-width:760px;margin:auto;display:flex;align-items:center;gap:12px;padding:9px 12px 9px 20px;background:#fff;border:1px solid #dfe4eb;border-radius:32px;box-shadow:0 1px 6px #20212422}.search:focus-within{border-color:#b8d2fa;box-shadow:0 1px 8px #1a73e833}.search svg{width:20px;height:20px;color:#8995a5;flex:none}.search input{min-width:0;flex:1;border:0;outline:0;background:transparent;font-size:16px;padding:7px 0}.btn{border:1px solid transparent;border-radius:22px;padding:10px 17px;font-weight:600}.primary{background:var(--blue);color:white}.primary:hover{background:#1767d2}.soft{background:#f1f4f8;color:var(--text);border-color:var(--line)}.soft:hover{background:#eaf1ff}.actions,.options,.status{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px}.actions{margin:16px 0 9px}.options{justify-content:flex-start;max-width:760px;margin:0 auto 16px;padding-left:5px;color:var(--muted);font-size:13px}.options label{display:flex;align-items:center;gap:6px}.options input{accent-color:var(--blue)}
+.status{justify-content:flex-start;max-width:760px;margin:0 auto 18px}.status span{padding:9px 13px;background:white;border:1px solid var(--line);border-radius:10px;color:var(--muted)}.status .error{color:#b3261e;background:#fff3f2;border-color:#f2cccc}
+.grid{display:grid;grid-template-columns:1.7fr 1fr;gap:18px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:20px;box-shadow:0 8px 26px #14213d0b}.panel h2{font-size:16px;margin:0 0 12px}.meta{color:var(--muted);font-size:13px}.results{display:grid;gap:11px;margin-top:13px}.result{border:1px solid var(--line);border-radius:13px;padding:13px 15px;background:linear-gradient(#fff,#fbfcff)}.result .url{font-size:12px;color:var(--green);margin-bottom:4px}.result h3{font-size:17px;color:var(--blue);margin:0 0 4px}.result p{margin:0;color:var(--muted);overflow-wrap:anywhere}.result mark{background:#fff0a8;border-radius:3px;padding:1px 2px}.empty{color:var(--muted);padding:10px 0}.patches{display:grid;gap:10px}.patch{display:flex;gap:9px;padding:10px;border:1px solid var(--line);border-radius:11px;background:#fafbfd}.patch input{margin-top:3px;accent-color:var(--blue)}.patch b,.patch small{display:block}.patch small{color:var(--muted);font-size:12px}
+.source{margin-top:18px}.source label{display:block;color:var(--muted);margin-bottom:8px}.urlrow{display:flex;gap:9px;margin-bottom:13px}.urlrow input{flex:1;min-width:0;border:1px solid var(--line);border-radius:11px;padding:11px 13px;outline:0}.urlrow input:focus,textarea:focus{border-color:#adcaf7;box-shadow:0 0 0 3px #1a73e814;outline:0}textarea{width:100%;min-height:250px;resize:vertical;border:1px solid var(--line);border-radius:14px;padding:13px;background:#fbfcff;color:var(--text)}.download{text-align:center;margin-top:12px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.topbar{padding-right:16px}.search .primary{display:none}main{padding:18px 13px 40px}}
 </style>
 </head>
 <body>
+<header class="topbar"><a href="#">About</a><a href="#">Search tools</a><a href="#">Help</a></header>
 <main>
-  <h1>GCSE Biology Preview</h1>
-  <div class="toolbar">
-    <button id="load">Load latest GUST</button>
-    <button class="alt" id="paste">Paste HTML</button>
-    <input id="file" type="file" accept=".html,.htm,text/html">
-    <button id="download" disabled>Download patched</button>
-  </div>
-
-  <div class="panel">
-    <label class="muted" for="domain">Load a domain or HTML URL</label>
-    <div class="url-row" style="margin-top:8px">
-      <input id="domain" type="text" placeholder="example.com or https://example.com/index.html" autocomplete="url">
-      <button id="loadDomain">Load domain</button>
-    </div>
-    <small class="muted">The target server must allow browser CORS requests. If it does not, download the HTML and use the file picker instead.</small>
-  </div>
-
+  <div class="logo" aria-label="GCSE"><span class="blue">G</span><span class="red">C</span><span class="yellow">S</span><span class="green">E</span></div>
+  <div class="search" role="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><path d="m16 16 5 5"/></svg><input id="searchBox" placeholder="Search loaded source or text…" autocomplete="off"><button id="find" class="btn primary">Search</button></div>
+  <div class="actions"><button id="load" class="btn soft">Load latest GUST</button><button id="paste" class="btn soft">Paste HTML</button><label class="btn soft">Upload HTML<input id="file" type="file" accept=".html,.htm,text/html" hidden></label></div>
+  <div class="options"><label><input id="regex" type="checkbox"> regex</label><label><input id="caseSensitive" type="checkbox"> case sensitive</label><button id="clearSearch" class="btn soft">Clear</button></div>
+  <div class="status"><span id="status">No source loaded.</span></div>
   <div class="grid">
-    <div class="panel">
-      <label class="muted" for="searchBox">Search loaded source</label>
-      <input id="searchBox" type="text" placeholder="Search text or regex…" autocomplete="off">
-      <div class="row" style="margin-top:10px">
-        <button id="find" class="alt">Find</button><button id="clearSearch" class="alt">Clear</button>
-        <label class="toggle"><input id="regex" type="checkbox"> regex</label>
-        <label class="toggle"><input id="caseSensitive" type="checkbox"> case sensitive</label>
-      </div>
-      <div id="searchMeta" class="muted" style="margin-top:10px">No search yet.</div>
-      <div id="searchResults" class="search-results"></div>
-    </div>
-    <div class="panel"><strong>Patches</strong><div id="patches"></div></div>
+    <section class="panel"><h2>Search results</h2><div id="searchMeta" class="meta">No search yet.</div><div id="searchResults" class="results"><div class="empty">Load or paste HTML, then search.</div></div></section>
+    <aside class="panel"><h2>Patches</h2><div id="patches" class="patches"></div></aside>
   </div>
-
-  <div class="panel"><label class="muted" for="source">Source HTML</label><textarea id="source" placeholder="Paste HTML here if fetch is blocked by the browser or network."></textarea></div>
-  <div id="status" class="status">No source loaded.</div>
+  <section class="panel source"><label for="domain">Load a domain or HTML URL</label><div class="urlrow"><input id="domain" placeholder="example.com or https://example.com/index.html" autocomplete="url"><button id="loadDomain" class="btn primary">Load</button></div><textarea id="source" placeholder="Paste HTML here if fetch is blocked by the browser or network."></textarea><div class="download"><button id="download" class="btn soft" disabled>Download patched</button></div></section>
 </main>
 <script>
-(() => {
-  'use strict';
-  const rawUrl='https://raw.githubusercontent.com/nautilus-os/GUST/main/index.html';
-  const query=sel=>document.querySelector(sel);
-  const sourceBox=query('#source'),statusBox=query('#status'),searchBox=query('#searchBox'),searchMeta=query('#searchMeta'),searchResults=query('#searchResults'),downloadBtn=query('#download'),fileInput=query('#file'),patchContainer=query('#patches'),regexInput=query('#regex'),caseSensitiveInput=query('#caseSensitive'),domainInput=query('#domain');
-  let source='';
-  const rules=[
-    ['wisp-url','WISP URL input','Removes WISP server URL settings',/<!--[\s\S]*?(?:WISP|WebSocket)[\s\S]*?-->|(?:<label[^>]*>[^<]*(?:WISP|WebSocket)[^<]*<\/label>[\s\S]*?<input[^>]*(?:url|wisp)[^>]*>)/gi],
-    ['threads','Thread controls','Removes idle/active thread controls',/<!--[\s\S]*?thread[\s\S]*?-->|(?:<[^>]+>[^<]*thread[^<]*<\/[^>]+>)/gi],
-    ['webrtc','WebRTC blocking','Removes WebRTC blocking controls',/<!--[\s\S]*?WebRTC[\s\S]*?-->|(?:<[^>]+>[^<]*WebRTC[^<]*<\/[^>]+>)/gi],
-    ['media-headers','Smart request headers','Removes spoofed request-header settings',/<!--[\s\S]*?(?:Sec-Fetch|Referer)[\s\S]*?-->|(?:<[^>]+>[^<]*(?:Sec-Fetch|Referer)[^<]*<\/[^>]+>)/gi],
-    ['spellcheck','Spellcheck','Removes the spellcheck setting',/<!--[\s\S]*?spellcheck[\s\S]*?-->|(?:<[^>]+>[^<]*spellcheck[^<]*<\/[^>]+>)/gi],
-    ['search-favicon','Favicon proxy','Removes favicon proxying options',/<!--[\s\S]*?favicon[\s\S]*?-->|(?:<[^>]+>[^<]*favicon[^<]*<\/[^>]+>)/gi],
-    ['ua-request','Request user-agent','Removes request UA fields',/<!--[\s\S]*?user.?agent[\s\S]*?-->|(?:<[^>]+>[^<]*user.?agent[^<]*<\/[^>]+>)/gi],
-    ['custom-filters','Custom filters','Removes custom filter controls',/<!--[\s\S]*?custom filter[\s\S]*?-->|(?:<[^>]+>[^<]*custom filter[^<]*<\/[^>]+>)/gi],
-    ['tutorial','Tutorial','Removes tutorial UI and steps',/<!--[\s\S]*?tutorial[\s\S]*?-->|(?:<[^>]+>[^<]*tutorial[^<]*<\/[^>]+>)/gi]
-  ];
-  function setStatus(msg,error){statusBox.textContent=msg;statusBox.classList.toggle('error',!!error)}
-  function escapeHtml(str){return String(str).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]))}
-  function escapeRegExp(str){return String(str).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
-  function renderRules(){patchContainer.innerHTML=rules.map(([id,label,desc])=>`<label class="patch-item"><input type="checkbox" data-rule="${id}" checked><span><b>${label}</b><small>${desc}</small></span></label>`).join('')}
-  function setSource(text){source=text||'';sourceBox.value=source;downloadBtn.disabled=!source;setStatus(source?`Loaded ${source.length.toLocaleString()} characters. Search or patch it.`:'No source loaded.');applySearch()}
-  async function fetchHtml(url,label){setStatus(`Fetching ${url}…`);try{const res=await fetch(url,{cache:'no-store'});if(!res.ok)throw new Error(`${res.status} ${res.statusText}`);setSource(await res.text());setStatus(`Loaded ${source.length.toLocaleString()} characters from ${label}.`)}catch(err){setStatus(`Could not load ${url}. The site may block cross-origin requests (CORS). Try downloading its HTML and selecting the file instead.\n${err.message}`,true)}}
-  function normaliseUrl(value){let url=value.trim();if(!url)return '';if(!/^https?:\/\//i.test(url))url='https://'+url;const parsed=new URL(url);if(!['http:','https:'].includes(parsed.protocol))throw new Error('Only HTTP and HTTPS URLs are supported.');return parsed.href}
-  function buildSnippet(raw,term,regexMode,caseSensitive){const text=escapeHtml(raw);try{const re=new RegExp(regexMode?term:escapeRegExp(term),caseSensitive?'g':'gi');return `<div class="snippet">${text.replace(re,m=>`<mark>${escapeHtml(m)}</mark>`).slice(0,260)}</div>`}catch{return `<div class="snippet">${text.slice(0,180)}</div>`}}
-  function applySearch(){const term=searchBox.value.trim(),haystack=source||sourceBox.value||'';if(!term){searchMeta.textContent='No search yet.';searchResults.innerHTML='<div class="empty">Type a word or regex to search the loaded source.</div>';return}try{const re=new RegExp(regexInput.checked?term:escapeRegExp(term),caseSensitiveInput.checked?'g':'gi'),matches=[];let m;while((m=re.exec(haystack))!==null){matches.push(haystack.slice(Math.max(0,m.index-80),Math.min(haystack.length,m.index+180)));if(m.index===re.lastIndex)re.lastIndex++}searchMeta.textContent=`${matches.length.toLocaleString()} match${matches.length===1?'':'es'} found.`;searchResults.innerHTML=matches.length?matches.slice(0,12).map(x=>buildSnippet(x,term,regexInput.checked,caseSensitiveInput.checked)).join(''):'<div class="empty">No matches found.</div>'}catch(err){searchMeta.textContent=`Invalid search pattern: ${err.message}`;searchResults.innerHTML='<div class="empty">Fix the regex or search term and try again.</div>'}}
-  query('#find').addEventListener('click',applySearch);searchBox.addEventListener('input',applySearch);regexInput.addEventListener('change',applySearch);caseSensitiveInput.addEventListener('change',applySearch);
-  query('#clearSearch').addEventListener('click',()=>{searchBox.value='';applySearch()});
-  query('#paste').addEventListener('click',()=>{const value=prompt('Paste HTML here:');if(value!==null)setSource(value)});
-  query('#load').addEventListener('click',()=>fetchHtml(rawUrl,'latest GUST source'));
-  query('#loadDomain').addEventListener('click',()=>{try{const url=normaliseUrl(domainInput.value);if(!url){setStatus('Enter a domain or URL first.',true);return}fetchHtml(url,url)}catch(err){setStatus(err.message,true)}});
-  domainInput.addEventListener('keydown',e=>{if(e.key==='Enter')query('#loadDomain').click()});
-  fileInput.addEventListener('change',async e=>{const file=e.target.files&&e.target.files[0];if(!file)return;try{setSource(await file.text());setStatus(`Loaded ${source.length.toLocaleString()} characters from ${file.name}.`)}catch(err){setStatus(`Could not read file: ${err.message}`,true)}});
-  sourceBox.addEventListener('input',()=>setSource(sourceBox.value));
-  downloadBtn.addEventListener('click',()=>{const html=sourceBox.value||source;if(!html){setStatus('Nothing to download yet.',true);return}let out=html,removed=0;const checked=[...document.querySelectorAll('input[data-rule]:checked')];rules.forEach(([id,,,rx])=>{if(checked.some(el=>el.dataset.rule===id))out=out.replace(rx,()=>{removed++;return ''})});if(!removed){setStatus('No selected patch rule matched the source.',true);return}const a=document.createElement('a'),url=URL.createObjectURL(new Blob([out],{type:'text/html;charset=utf-8'}));a.href=url;a.download='gcse-biology-preview-patched.html';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);setStatus(`Downloaded gcse-biology-preview-patched.html. Removed ${removed} match${removed===1?'':'es'}.`)});
-  renderRules();setStatus('Ready. Load a domain, GUST, paste HTML, or select a local file.');
-})();
+(()=>{'use strict';
+const rawUrl='https://raw.githubusercontent.com/nautilus-os/GUST/main/index.html',q=s=>document.querySelector(s),sourceBox=q('#source'),statusBox=q('#status'),searchBox=q('#searchBox'),results=q('#searchResults'),meta=q('#searchMeta'),patchBox=q('#patches'),download=q('#download');let source='';
+const rules=[['wisp-url','WISP URL input','Removes WISP server URL settings',/<!--[\s\S]*?(?:WISP|WebSocket)[\s\S]*?-->|(?:<label[^>]*>[^<]*(?:WISP|WebSocket)[^<]*<\/label>[\s\S]*?<input[^>]*(?:url|wisp)[^>]*>)/gi],['threads','Thread controls','Removes idle/active thread controls',/<!--[\s\S]*?thread[\s\S]*?-->|(?:<[^>]+>[^<]*thread[^<]*<\/[^>]+>)/gi],['webrtc','WebRTC blocking','Removes WebRTC blocking controls',/<!--[\s\S]*?WebRTC[\s\S]*?-->|(?:<[^>]+>[^<]*WebRTC[^<]*<\/[^>]+>)/gi],['media-headers','Smart request headers','Removes spoofed request-header settings',/<!--[\s\S]*?(?:Sec-Fetch|Referer)[\s\S]*?-->|(?:<[^>]+>[^<]*(?:Sec-Fetch|Referer)[^<]*<\/[^>]+>)/gi],['spellcheck','Spellcheck','Removes the spellcheck setting',/<!--[\s\S]*?spellcheck[\s\S]*?-->|(?:<[^>]+>[^<]*spellcheck[^<]*<\/[^>]+>)/gi],['search-favicon','Favicon proxy','Removes favicon proxying options',/<!--[\s\S]*?favicon[\s\S]*?-->|(?:<[^>]+>[^<]*favicon[^<]*<\/[^>]+>)/gi],['ua-request','Request user-agent','Removes request UA fields',/<!--[\s\S]*?user.?agent[\s\S]*?-->|(?:<[^>]+>[^<]*user.?agent[^<]*<\/[^>]+>)/gi],['custom-filters','Custom filters','Removes custom filter controls',/<!--[\s\S]*?custom filter[\s\S]*?-->|(?:<[^>]+>[^<]*custom filter[^<]*<\/[^>]+>)/gi],['tutorial','Tutorial','Removes tutorial UI and steps',/<!--[\s\S]*?tutorial[\s\S]*?-->|(?:<[^>]+>[^<]*tutorial[^<]*<\/[^>]+>)/gi]];
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}function escRe(s){return String(s).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}function status(t,error=false){statusBox.textContent=t;statusBox.classList.toggle('error',error)}function setSource(t){source=t||'';sourceBox.value=source;download.disabled=!source;status(source?`Loaded ${source.length.toLocaleString()} characters. Search or patch it.`:'No source loaded.');}
+function renderRules(){patchBox.innerHTML=rules.map(r=>`<label class="patch"><input type="checkbox" data-rule="${r[0]}" checked><span><b>${r[1]}</b><small>${r[2]}</small></span></label>`).join('')}
+async function fetchHtml(url,label){status(`Fetching ${label||url}…`);try{const res=await fetch(url,{cache:'no-store'});if(!res.ok)throw Error(`${res.status} ${res.statusText}`);const text=await res.text();setSource(text);status(`Loaded ${text.length.toLocaleString()} characters.`)}catch(e){status(`Failed to load: ${e.message}`,true)}}
+function search(){const term=searchBox.value.trim(),hay=source||sourceBox.value||'';if(!term){meta.textContent='No search yet.';results.innerHTML='<div class="empty">Load or paste HTML, then search.</div>';return}const rx=q('#regex').checked,cs=q('#caseSensitive').checked;try{const re=new RegExp(rx?term:escRe(term),cs?'g':'gi'),hits=[];let m;while((m=re.exec(hay))&&hits.length<10){hits.push(m);if(!m[0])re.lastIndex++}meta.textContent=hits.length?`${hits.length} result${hits.length===1?'':'s'} for “${esc(term)}”.`:`No results for “${esc(term)}”.`;results.innerHTML=hits.length?hits.map((m,i)=>{const before=hay.slice(Math.max(0,m.index-120),m.index),after=hay.slice(m.index+m[0].length,m.index+m[0].length+220);return `<article class="result"><div class="url">Result ${i+1}</div><h3>Match ${i+1}</h3><p>${esc(before)}<mark>${esc(m[0])}</mark>${esc(after)}</p></article>`}).join(''):'<div class="empty">No matches found.</div>'}catch(e){meta.textContent='Search error';results.innerHTML=`<div class="empty">${esc(e.message)}</div>`}}
+function normalise(v){v=v.trim();if(!v)return '';if(!/^https?:\/\//i.test(v))v='https://'+v;const u=new URL(v);if(!/^https?:$/.test(u.protocol))throw Error('Only HTTP and HTTPS URLs are supported.');return u.href}
+q('#load').onclick=()=>fetchHtml(rawUrl,'latest GUST source');q('#paste').onclick=()=>{const v=prompt('Paste HTML here:');if(v!==null)setSource(v)};q('#loadDomain').onclick=()=>{try{const u=normalise(q('#domain').value);if(!u)return status('Enter a domain or URL first.',true);fetchHtml(u,u)}catch(e){status(e.message,true)}};q('#domain').onkeydown=e=>{if(e.key==='Enter')q('#loadDomain').click()};q('#file').onchange=async e=>{const f=e.target.files[0];if(f){try{setSource(await f.text());status(`Loaded ${f.name}.`)}catch(x){status(x.message,true)}}};sourceBox.oninput=()=>setSource(sourceBox.value);q('#find').onclick=search;searchBox.oninput=search;q('#regex').onchange=search;q('#caseSensitive').onchange=search;q('#clearSearch').onclick=()=>{searchBox.value='';search()};download.onclick=()=>{let out=sourceBox.value||source;document.querySelectorAll('#patches input:checked').forEach(i=>{const r=rules.find(x=>x[0]===i.dataset.rule);if(r)out=out.replace(r[3],'')});const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([out],{type:'text/html'}));a.download='patched-gust.html';a.click();status('Patched HTML downloaded.')};renderRules();status('Ready. Search, load, or paste HTML to begin.')})();
 </script>
 </body>
 </html>
