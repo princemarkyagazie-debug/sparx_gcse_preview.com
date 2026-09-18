@@ -1,43 +1,271 @@
 <!doctype html>
 <html lang="en">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GUST Patcher</title>
+<title>GUST Search + Patcher</title>
 <style>
-:host{all:initial}*{box-sizing:border-box}body{margin:0;background:#101318;color:#eef3f8;font:14px system-ui,sans-serif}main{max-width:900px;margin:auto;padding:24px}h1{margin:0 0 6px;color:#9de5ff}p{color:#aab5c0}.bar,.card{background:#1b2129;border:1px solid #485361;border-radius:10px;padding:16px;margin:14px 0}.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}button,input,textarea{font:inherit}button{border:0;border-radius:7px;padding:9px 13px;background:#9de5ff;color:#071016;font-weight:700;cursor:pointer}button.alt{background:#252d36;color:#eef3f8;border:1px solid #586575}button:disabled{opacity:.45;cursor:not-allowed}input[type=file]{max-width:220px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.item{display:flex;gap:10px;align-items:flex-start;background:#252d36;border:1px solid #465260;border-radius:8px;padding:11px}.item input{margin-top:3px;accent-color:#9de5ff}.item small{display:block;color:#9aa7b4;margin-top:3px}.status{font-family:ui-monospace,monospace;color:#9de5ff;white-space:pre-wrap}.error{color:#ff9b9b}textarea{width:100%;min-height:180px;resize:vertical;background:#0d1014;color:#eef3f8;border:1px solid #485361;border-radius:7px;padding:10px}
+:root{--bg:#0d1117;--panel:#171d25;--panel2:#1f2730;--line:#3a4755;--text:#edf3f8;--muted:#b8c2ce;--accent:#9de5ff;--ok:#9be3ad;--warn:#f7d783;--danger:#ff9ea0}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}body{padding:24px}main{max-width:1100px;margin:0 auto}.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0 20px}button,input,textarea{font:inherit}button{background:var(--accent);color:#081218;border:0;border-radius:8px;padding:10px 14px;font-weight:700;cursor:pointer}button.alt{background:var(--panel2);color:var(--text);border:1px solid var(--line)}button:disabled{opacity:.45;cursor:not-allowed}input[type=file]{max-width:240px;color:var(--muted)}input[type=text],textarea{width:100%;background:#0f1419;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:10px 12px}textarea{min-height:260px;resize:vertical}.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:16px}.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}.toggle{display:inline-flex;align-items:center;gap:6px;color:var(--muted)}.muted{color:var(--muted)}.status{margin-top:12px;padding:10px 12px;border-radius:8px;background:rgba(157,229,255,.08);border:1px solid rgba(157,229,255,.2);color:var(--text)}.status.error{background:rgba(255,158,160,.08);border-color:rgba(255,158,160,.25);color:var(--danger)}.patch-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)}.patch-item:last-child{border-bottom:none}.patch-item input{margin-top:4px;accent-color:var(--accent)}.patch-item b{display:block}.patch-item small{color:var(--muted)}.search-results{margin-top:10px;max-height:220px;overflow:auto;padding-right:4px}.snippet{padding:8px 10px;background:#111923;border:1px solid var(--line);border-radius:8px;margin-top:8px;color:var(--muted)}mark{background:rgba(157,229,255,.25);color:var(--text);padding:0 2px;border-radius:4px}.empty{color:var(--muted);padding:8px 0}@media (max-width:760px){.grid{grid-template-columns:1fr}.body{padding:14px}main{max-width:100%}}
 </style>
-<main id="gust-patcher">
-<h1>GUST Patcher</h1><p>Load GUST, choose safe removals, then download the patched file.</p>
-<div class="bar"><button id="load">Fetch latest GUST</button><button class="alt" id="paste">Paste source</button><input id="file" type="file" accept=".html,.htm,text/html"><button id="download" disabled>Download</button></div>
-<div class="card"><strong>Patches</strong><div class="grid" id="patches"></div></div>
-<div class="card"><strong>Manual source</strong><textarea id="source" placeholder="Paste GUST index.html here if fetching is blocked by the host/browser…"></textarea></div>
-<div class="card status" id="status">No source loaded.</div>
+</head>
+<body>
+<main>
+  <h1>GUST Search + Patcher</h1>
+  <div class="toolbar">
+    <button id="load">Load latest GUST</button>
+    <button class="alt" id="paste">Paste HTML</button>
+    <input id="file" type="file" accept=".html,.htm,text/html">
+    <button id="download" disabled>Download patched</button>
+  </div>
+
+  <div class="grid">
+    <div class="panel">
+      <label class="muted" for="searchBox">Search loaded source</label>
+      <input id="searchBox" type="text" placeholder="Search text or regex…" autocomplete="off">
+      <div class="row">
+        <button id="find" class="alt">Find</button>
+        <button id="clearSearch" class="alt">Clear</button>
+        <label class="toggle"><input id="regex" type="checkbox"> regex</label>
+        <label class="toggle"><input id="caseSensitive" type="checkbox"> case sensitive</label>
+      </div>
+      <div id="searchMeta" class="muted" style="margin-top:10px">No search yet.</div>
+      <div id="searchResults" class="search-results"></div>
+    </div>
+
+    <div class="panel">
+      <strong>Patches</strong>
+      <div id="patches"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <label class="muted" for="source">Source HTML</label>
+    <textarea id="source" placeholder="Paste GUST index.html here if fetch is blocked by the browser or network."></textarea>
+  </div>
+
+  <div id="status" class="status">No source loaded.</div>
 </main>
 <script>
-(()=>{
-'use strict';
-const root=document.getElementById('gust-patcher'),$=s=>root.querySelector(s),raw='https://raw.githubusercontent.com/nautilus-os/GUST/main/index.html';
-let source='',out='';
-/* Each rule is deliberately conservative: only its own marker is removed. Add rules here
-   when GUST changes instead of maintaining a large string of inline handlers. */
-const rules=[
- ['wisp-url','WISP URL input','Removes the WISP server URL setting',/<!--[\s\S]*?WISP[\s\S]*?-->|(?:<label[^>]*>[^<]*(?:WISP|WebSocket)[^<]*<\/label>[\s\S]*?<input[^>]*(?:url|wisp)[^>]*>)/gi],
- ['threads','Thread controls','Removes idle/active thread controls',/<!--[\s\S]*?thread[\s\S]*?-->|(?:<[^>]+>[^<]*thread[^<]*<\/[^>]+>)/gi],
- ['webrtc','WebRTC blocking','Removes WebRTC blocking setting',/<!--[\s\S]*?WebRTC[\s\S]*?-->|(?:<[^>]+>[^<]*WebRTC[^<]*<\/[^>]+>)/gi],
- ['media-headers','Smart request headers','Removes request-header spoofing setting',/<!--[\s\S]*?(?:Sec-Fetch|Referer)[\s\S]*?-->|(?:<[^>]+>[^<]*(?:Sec-Fetch|Referer)[^<]*<\/[^>]+>)/gi],
- ['spellcheck','Spellcheck','Removes spellcheck setting',/<!--[\s\S]*?spellcheck[\s\S]*?-->|(?:<[^>]+>[^<]*spellcheck[^<]*<\/[^>]+>)/gi],
- ['search-favicon','Favicon proxy','Removes favicon proxy setting',/<!--[\s\S]*?favicon[\s\S]*?-->|(?:<[^>]+>[^<]*favicon[^<]*<\/[^>]+>)/gi],
- ['ua-request','Request user-agent','Removes request UA setting',/<!--[\s\S]*?user.?agent[\s\S]*?-->|(?:<[^>]+>[^<]*user.?agent[^<]*<\/[^>]+>)/gi],
- ['custom-filters','Custom filters','Removes custom filter setting',/<!--[\s\S]*?custom filter[\s\S]*?-->|(?:<[^>]+>[^<]*custom filter[^<]*<\/[^>]+>)/gi],
- ['tutorial','Tutorial','Removes tutorial markup',/<!--[\s\S]*?tutorial[\s\S]*?-->|(?:<[^>]+>[^<]*tutorial[^<]*<\/[^>]+>)/gi]
-];
-const patchBox=$('#patches');rules.forEach(([id,name,desc])=>patchBox.insertAdjacentHTML('beforeend',`<label class="item"><input type="checkbox" data-rule="${id}"><span><b>${name}</b><small>${desc}</small></span></label>`));
-const setStatus=(s,error=false)=>{$('#status').textContent=s;$('#status').className='card status'+(error?' error':'')};
-const setSource=s=>{source=String(s||'');$('#source').value=source;out='';$('#download').disabled=!source;setStatus(source?`Loaded ${source.length.toLocaleString()} characters. Select patches and download.`:'No source loaded.');};
-async function load(){setStatus('Fetching GUST…');try{let r=await fetch(raw,{cache:'no-store'});if(!r.ok)throw Error(`${r.status} ${r.statusText}`);setSource(await r.text())}catch(e){setStatus('Fetch failed. Paste the source or choose the HTML file instead.\n'+e.message,true)}}
-$('#load').onclick=load;$('#paste').onclick=()=>{const v=prompt('Paste GUST index.html:');if(v)setSource(v)};$('#file').onchange=async e=>{const f=e.target.files[0];if(f)setSource(await f.text())};$('#source').oninput=e=>{source=e.target.value;out='';$('#download').disabled=!source;};
-$('#download').onclick=()=>{if(!source)return;out=source;let removed=0;rules.forEach(([id,, ,rx])=>{if($(`[data-rule="${id}"]`).checked)out=out.replace(rx,()=>{removed++;return ''})});if(!removed){setStatus('No selected rule matched the loaded source.',true);return}let blob=new Blob([out],{type:'text/html'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='gust-patched.html';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);setStatus(`Downloaded gust-patched.html\nRemoved ${removed} matching block(s).`)};
-load();
+(() => {
+  'use strict';
+  const rawUrl = 'https://raw.githubusercontent.com/nautilus-os/GUST/main/index.html';
+  const query = (sel) => document.querySelector(sel);
+  const sourceBox = query('#source');
+  const statusBox = query('#status');
+  const searchBox = query('#searchBox');
+  const searchMeta = query('#searchMeta');
+  const searchResults = query('#searchResults');
+  const downloadBtn = query('#download');
+  const fileInput = query('#file');
+  const patchContainer = query('#patches');
+  const regexInput = query('#regex');
+  const caseSensitiveInput = query('#caseSensitive');
+
+  let source = '';
+  let lastMatchCount = 0;
+
+  const rules = [
+    ['wisp-url','WISP URL input','Removes WISP server URL settings',/<!--[\s\S]*?(?:WISP|WebSocket)[\s\S]*?-->|(?:<label[^>]*>[^<]*(?:WISP|WebSocket)[^<]*<\/label>[\s\S]*?<input[^>]*(?:url|wisp)[^>]*>)/gi],
+    ['threads','Thread controls','Removes idle/active thread controls',/<!--[\s\S]*?thread[\s\S]*?-->|(?:<[^>]+>[^<]*thread[^<]*<\/[^>]+>)/gi],
+    ['webrtc','WebRTC blocking','Removes WebRTC blocking controls',/<!--[\s\S]*?WebRTC[\s\S]*?-->|(?:<[^>]+>[^<]*WebRTC[^<]*<\/[^>]+>)/gi],
+    ['media-headers','Smart request headers','Removes spoofed request-header settings',/<!--[\s\S]*?(?:Sec-Fetch|Referer)[\s\S]*?-->|(?:<[^>]+>[^<]*(?:Sec-Fetch|Referer)[^<]*<\/[^>]+>)/gi],
+    ['spellcheck','Spellcheck','Removes the spellcheck setting',/<!--[\s\S]*?spellcheck[\s\S]*?-->|(?:<[^>]+>[^<]*spellcheck[^<]*<\/[^>]+>)/gi],
+    ['search-favicon','Favicon proxy','Removes favicon proxying options',/<!--[\s\S]*?favicon[\s\S]*?-->|(?:<[^>]+>[^<]*favicon[^<]*<\/[^>]+>)/gi],
+    ['ua-request','Request user-agent','Removes request UA fields',/<!--[\s\S]*?user.?agent[\s\S]*?-->|(?:<[^>]+>[^<]*user.?agent[^<]*<\/[^>]+>)/gi],
+    ['custom-filters','Custom filters','Removes custom filter controls',/<!--[\s\S]*?custom filter[\s\S]*?-->|(?:<[^>]+>[^<]*custom filter[^<]*<\/[^>]+>)/gi],
+    ['tutorial','Tutorial','Removes tutorial UI and steps',/<!--[\s\S]*?tutorial[\s\S]*?-->|(?:<[^>]+>[^<]*tutorial[^<]*<\/[^>]+>)/gi]
+  ];
+
+  function setStatus(msg, isError) {
+    statusBox.textContent = msg;
+    statusBox.classList.toggle('error', !!isError);
+  }
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
+  }
+
+  function renderRules() {
+    patchContainer.innerHTML = rules.map(([id, label, desc]) => `
+      <label class="patch-item">
+        <input type="checkbox" data-rule="${id}" checked>
+        <span>
+          <b>${label}</b>
+          <small>${desc}</small>
+        </span>
+      </label>
+    `).join('');
+  }
+
+  function setSource(text) {
+    source = text || '';
+    sourceBox.value = source;
+    downloadBtn.disabled = !source;
+    if (source) {
+      setStatus(`Loaded ${source.length.toLocaleString()} characters. Search or patch it.`);
+    } else {
+      setStatus('No source loaded.');
+    }
+    applySearch();
+  }
+
+  async function loadLatest() {
+    setStatus('Fetching latest GUST source…');
+    try {
+      const res = await fetch(rawUrl, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      setSource(await res.text());
+    } catch (err) {
+      setStatus(`Fetch failed. Paste the source manually or choose a local HTML file.\n${err.message}`, true);
+    }
+  }
+
+  function buildSnippet(rawText, searchTerm, regexMode, caseSensitive) {
+    const text = escapeHtml(rawText);
+    if (!searchTerm) return `<div class="snippet">${text.slice(0, 180)}</div>`;
+    try {
+      const flags = caseSensitive ? 'g' : 'gi';
+      const pattern = regexMode ? searchTerm : escapeRegExp(searchTerm);
+      const re = new RegExp(pattern, flags);
+      const html = text.replace(re, match => `<mark>${escapeHtml(match)}</mark>`);
+      return `<div class="snippet">${html.slice(0, 260)}</div>`;
+    } catch {
+      return `<div class="snippet">${text.slice(0, 180)}</div>`;
+    }
+  }
+
+  function escapeRegExp(str) {
+    return String(str).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function applySearch() {
+    const term = searchBox.value.trim();
+    if (!term) {
+      searchMeta.textContent = 'No search yet.';
+      searchResults.innerHTML = '<div class="empty">Type a word or regex to search the loaded source.</div>';
+      return;
+    }
+
+    const regexMode = regexInput.checked;
+    const caseSensitive = caseSensitiveInput.checked;
+    const haystack = source || sourceBox.value || '';
+    let matches = [];
+
+    try {
+      const flags = caseSensitive ? 'g' : 'gi';
+      const pattern = regexMode ? term : escapeRegExp(term);
+      const re = new RegExp(pattern, flags);
+      let m;
+      while ((m = re.exec(haystack)) !== null) {
+        matches.push({
+          text: haystack.slice(Math.max(0, m.index - 80), Math.min(haystack.length, m.index + 180)),
+          index: m.index
+        });
+        if (m.index === re.lastIndex) re.lastIndex += 1;
+      }
+    } catch (err) {
+      searchMeta.textContent = `Invalid search pattern: ${err.message}`;
+      searchResults.innerHTML = '<div class="empty">Fix the regex or search term and try again.</div>';
+      return;
+    }
+
+    lastMatchCount = matches.length;
+    searchMeta.textContent = `${matches.length.toLocaleString()} match${matches.length === 1 ? '' : 'es'} found.`;
+
+    if (!matches.length) {
+      searchResults.innerHTML = '<div class="empty">No matches found.</div>';
+      return;
+    }
+
+    const snippets = matches.slice(0, 12).map(item => {
+      const needle = item.text;
+      return buildSnippet(needle, term, regexMode, caseSensitive);
+    });
+
+    searchResults.innerHTML = snippets.join('');
+  }
+
+  document.getElementById('find').addEventListener('click', applySearch);
+  searchBox.addEventListener('input', applySearch);
+  regexInput.addEventListener('change', applySearch);
+  caseSensitiveInput.addEventListener('change', applySearch);
+
+  query('#clearSearch').addEventListener('click', () => {
+    searchBox.value = '';
+    searchMeta.textContent = 'No search yet.';
+    searchResults.innerHTML = '<div class="empty">Type a word or regex to search the loaded source.</div>';
+  });
+
+  query('#paste').addEventListener('click', () => {
+    const value = prompt('Paste GUST index.html here:');
+    if (value !== null) setSource(value);
+  });
+
+  fileInput.addEventListener('change', async (event) => {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    try {
+      const text = await file.text();
+      setSource(text);
+    } catch (err) {
+      setStatus(`Could not read file: ${err.message}`, true);
+    }
+  });
+
+  sourceBox.addEventListener('input', () => {
+    source = sourceBox.value;
+    if (source) {
+      setStatus(`Loaded ${source.length.toLocaleString()} characters from the source box.`);
+      downloadBtn.disabled = false;
+    } else {
+      downloadBtn.disabled = true;
+      setStatus('No source loaded.');
+    }
+    applySearch();
+  });
+
+  downloadBtn.addEventListener('click', () => {
+    const html = sourceBox.value || source;
+    if (!html) {
+      setStatus('Nothing to download yet.', true);
+      return;
+    }
+
+    let out = html;
+    let removed = 0;
+    const checked = [...document.querySelectorAll('input[data-rule]:checked')];
+
+    rules.forEach(([id, , , rx]) => {
+      if (!checked.some(el => el.dataset.rule === id)) return;
+      const next = out.replace(rx, () => {
+        removed += 1;
+        return '';
+      });
+      out = next;
+    });
+
+    if (!removed) {
+      setStatus('No selected patch rule matched the source.', true);
+      return;
+    }
+
+    const blob = new Blob([out], { type: 'text/html;charset=utf-8' });
+    const a = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    a.href = url;
+    a.download = 'gust-patched.html';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    setStatus(`Downloaded gust-patched.html. Removed ${removed} match${removed === 1 ? '' : 'es'}.`);
+  });
+
+  renderRules();
+  setStatus('Ready. Load GUST, paste HTML, or select a local file.');
+  query('#load').addEventListener('click', loadLatest);
 })();
 </script>
+</body>
 </html>
