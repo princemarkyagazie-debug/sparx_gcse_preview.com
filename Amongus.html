@@ -1,45 +1,54 @@
 <!doctype html>
 <html lang="en">
 <head>
-<script src="https://jsdelivr.net"></script>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="description" content="Play a small Among Us-style game in your browser.">
-  <title>Among Us - Mini Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="A small 3D browser mission game with keyboard and touch controls.">
+  <title>Mini Mission 3D</title>
   <style>
-    :root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#111827;color:#f8fafc;display:grid;place-items:center}main{width:min(960px,100%);padding:12px;text-align:center}h1{font-size:clamp(1.4rem,4vw,2.2rem);margin:.3rem 0}.hint{color:#cbd5e1;margin:.25rem 0 .8rem}.game-wrap{position:relative;margin:auto;width:min(900px,100%);aspect-ratio:16/9;background:#020617;border:2px solid #475569;border-radius:12px;overflow:hidden;box-shadow:0 12px 35px #0008}canvas{display:block;width:100%;height:100%;touch-action:none}.hud{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:.65rem auto;max-width:900px}.pill,button{border:1px solid #64748b;border-radius:999px;background:#1e293b;color:#fff;padding:.55rem .85rem;font:inherit}.pill{flex:1;min-width:120px}button{cursor:pointer;background:#2563eb;border-color:#60a5fa}button:hover{filter:brightness(1.15)}.controls{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}.modal{position:fixed;inset:0;background:#000b;display:grid;place-items:center;padding:18px}.modal[hidden]{display:none}.card{max-width:520px;background:#1e293b;border:1px solid #64748b;border-radius:14px;padding:20px;text-align:left}.card h2{margin-top:0}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}@media(max-width:520px){.game-wrap{aspect-ratio:4/3}.hint{font-size:.9rem}}
+    :root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif}*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#070b16;color:#f8fafc}body{overflow:hidden}#game{position:fixed;inset:0;width:100vw;height:100vh;display:block}#ui{position:fixed;inset:0;pointer-events:none;padding:14px;display:flex;flex-direction:column;justify-content:space-between}.top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.title{font-size:clamp(18px,4vw,28px);font-weight:800;text-shadow:0 2px 5px #000}.pill,button,input{border:1px solid #ffffff2b;background:#101a2ddd;color:#fff;border-radius:12px;padding:9px 12px;font:inherit}.pill{font-size:14px}.actions{display:flex;gap:8px;pointer-events:auto}.actions button{cursor:pointer}.name{display:flex;gap:7px;pointer-events:auto}.name input{width:150px;outline:none}.hint{opacity:.8;font-size:13px;margin:0 0 6px}.panel{pointer-events:auto;align-self:center;display:none;text-align:center;background:#0b1224ee;border:1px solid #ffffff2b;border-radius:16px;padding:18px;max-width:330px;box-shadow:0 12px 40px #0008}.panel.show{display:block}.panel h2{margin:0 0 8px}.panel button{cursor:pointer;margin-top:10px}.joystick{position:fixed;left:24px;bottom:25px;width:118px;height:118px;border-radius:50%;background:#ffffff18;border:2px solid #ffffff35;pointer-events:auto;touch-action:none}.stick{position:absolute;left:50%;top:50%;width:52px;height:52px;margin:-26px;border-radius:50%;background:#5eead455;border:2px solid #99f6e455;box-shadow:0 0 18px #22d3ee55}.look{position:fixed;right:18px;bottom:24px;display:flex;gap:8px;pointer-events:auto}.look button{width:54px;height:48px;font-size:22px;touch-action:none}.task-dot{color:#67e8f9}@media (min-width:800px){.joystick,.look{opacity:.45}.joystick:hover,.look:hover{opacity:1}}
   </style>
 </head>
 <body>
-<main>
-  <h1>Among Us: Mini Mission</h1>
-  <p class="hint">Move with <b>WASD</b> or the arrow keys. Complete every task and avoid the impostor.</p>
-  <div class="game-wrap"><canvas id="game" aria-label="Playable mini game"></canvas></div>
-  <div class="hud"><span class="pill" id="tasks">Tasks: 0 / 3</span><span class="pill" id="status" role="status">Playing</span><span class="pill" id="score">Time: 0s</span></div>
-  <div class="controls"><button id="restart" type="button">Restart</button><button id="aboutBtn" type="button">How to play</button><button id="inviteBtn" type="button">Copy invite link</button></div>
-</main>
-<div class="modal" id="about" hidden><div class="card" role="dialog" aria-modal="true" aria-labelledby="aboutTitle"><h2 id="aboutTitle">How to play</h2><p>Finish the three glowing tasks. The red impostor chases you, so keep moving. Touch a task to complete it. If the impostor catches you, restart the mission.</p><button id="closeAbout" type="button">Close</button></div></div>
-<script>
-(() => {
-  'use strict';
-  const canvas=document.getElementById('game'),ctx=canvas.getContext('2d'),tasksEl=document.getElementById('tasks'),statusEl=document.getElementById('status'),scoreEl=document.getElementById('score');
-  const keys=new Set(); let raf=0,last=0,started=0,ended=false,won=false;
-  const player={x:80,y:80,r:14,speed:190}; const impostor={x:0,y:0,r:16,speed:58};
-  let tasks=[],elapsed=0;
-  const walls=[{x:.25,y:.15,w:.12,h:.32},{x:.62,y:.08,w:.12,h:.3},{x:.42,y:.58,w:.2,h:.12},{x:.08,y:.7,w:.2,h:.12}];
-  function resize(){const d=devicePixelRatio||1,r=canvas.getBoundingClientRect();canvas.width=Math.max(1,r.width*d);canvas.height=Math.max(1,r.height*d);ctx.setTransform(d,0,0,d,0,0)}
-  function W(){return canvas.clientWidth} function H(){return canvas.clientHeight}
-  function blocked(x,y,r){return x-r<0||y-r<0||x+r>W()||y+r>H()||walls.some(w=>x+r>w.x*W()&&x-r<(w.x+w.w)*W()&&y+r>w.y*H()&&y-r<(w.y+w.h)*H())}
-  function reset(){cancelAnimationFrame(raf); player.x=W()*.12;player.y=H()*.5;impostor.x=W()*.82;impostor.y=H()*.5;tasks=[{x:.18,y:.18,done:false},{x:.78,y:.75,done:false},{x:.52,y:.25,done:false}];elapsed=0;started=performance.now();ended=won=false;statusEl.textContent='Playing';draw();raf=requestAnimationFrame(loop)}
-  function move(o,dx,dy){const nx=o.x+dx,ny=o.y+dy;if(!blocked(nx,o.y,o.r))o.x=nx;if(!blocked(o.x,ny,o.r))o.y=ny}
-  function loop(now){const dt=Math.min((now-last)/1000,.05);last=now;if(!ended){elapsed=(now-started)/1000;let dx=(keys.has('ArrowRight')||keys.has('d')?1:0)-(keys.has('ArrowLeft')||keys.has('a')?1:0),dy=(keys.has('ArrowDown')||keys.has('s')?1:0)-(keys.has('ArrowUp')||keys.has('w')?1:0);const n=Math.hypot(dx,dy)||1;move(player,dx/n*player.speed*dt,dy/n*player.speed*dt);const d=Math.hypot(player.x-impostor.x,player.y-impostor.y)||1;move(impostor,(player.x-impostor.x)/d*impostor.speed*dt,(player.y-impostor.y)/d*impostor.speed*dt);tasks.forEach(t=>{if(!t.done&&Math.hypot(player.x-t.x*W(),player.y-t.y*H())<30)t.done=true});if(tasks.every(t=>t.done)){won=ended=true;statusEl.textContent='Mission complete!'}else if(Math.hypot(player.x-impostor.x,player.y-impostor.y)<player.r+impostor.r){ended=true;statusEl.textContent='Caught by the impostor'}updateHud()}draw();if(!ended)raf=requestAnimationFrame(loop)}
-  function updateHud(){tasksEl.textContent=`Tasks: ${tasks.filter(t=>t.done).length} / ${tasks.length}`;scoreEl.textContent=`Time: ${Math.floor(elapsed)}s`}
-  function draw(){const w=W(),h=H();ctx.clearRect(0,0,w,h);ctx.fillStyle='#0f172a';ctx.fillRect(0,0,w,h);ctx.strokeStyle='#1e3a5f';ctx.lineWidth=2;for(let x=0;x<w;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}for(let y=0;y<h;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}walls.forEach(a=>{ctx.fillStyle='#334155';ctx.fillRect(a.x*w,a.y*h,a.w*w,a.h*h)});tasks.forEach(t=>{ctx.beginPath();ctx.arc(t.x*w,t.y*h,12,0,Math.PI*2);ctx.fillStyle=t.done?'#22c55e':'#facc15';ctx.fill();ctx.strokeStyle='#fff';ctx.stroke()});dot(player.x,player.y,player.r,'#38bdf8');dot(impostor.x,impostor.y,impostor.r,'#ef4444');if(ended){ctx.fillStyle='#000b';ctx.fillRect(0,0,w,h);ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font='bold 28px system-ui';ctx.fillText(won?'YOU WIN':'GAME OVER',w/2,h/2);ctx.font='16px system-ui';ctx.fillText('Press Restart to play again',w/2,h/2+32)}}
-  function dot(x,y,r,c){ctx.fillStyle=c;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff8';ctx.beginPath();ctx.arc(x-r*.35,y-r*.35,r*.25,0,Math.PI*2);ctx.fill()}
-  addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','w','a','s','d'].includes(e.key))e.preventDefault();keys.add(e.key)});addEventListener('keyup',e=>keys.delete(e.key));addEventListener('resize',()=>{resize();reset()});document.getElementById('restart').onclick=reset;
-  const about=document.getElementById('about');document.getElementById('aboutBtn').onclick=()=>about.hidden=false;document.getElementById('closeAbout').onclick=()=>about.hidden=true;about.onclick=e=>{if(e.target===about)about.hidden=true};document.getElementById('inviteBtn').onclick=async()=>{const text=location.href;if(navigator.clipboard)await navigator.clipboard.writeText(text);else{const i=document.createElement('input');i.value=text;document.body.append(i);i.select();document.execCommand('copy');i.remove()}statusEl.textContent='Invite link copied'};
-  resize();reset();
-})();
-</script>
+  <canvas id="game" aria-label="3D mini mission game"></canvas>
+  <div id="ui">
+    <div>
+      <div class="top"><div class="title">Mini Mission 3D</div><span class="pill" id="tasks">Tasks: 0 / 3</span><span class="pill" id="status">Playing</span><span class="pill" id="time">Time: 0s</span></div>
+      <p class="hint">Move with WASD, arrow keys, or the on-screen joystick. Complete the glowing tasks and avoid the red impostor.</p>
+      <div class="name"><input id="name" maxlength="16" placeholder="Your name" aria-label="Your player name"><button id="saveName" type="button">Set name</button></div>
+    </div>
+    <div class="panel" id="panel"><h2 id="panelTitle">Mission complete</h2><div id="panelText"></div><button id="restart" type="button">Play again</button></div>
+    <div class="actions"><button id="help" type="button">How to play</button><button id="resetName" type="button">Reset name</button></div>
+  </div>
+  <div class="joystick" id="joystick" aria-label="Touch movement control"><div class="stick" id="stick"></div></div>
+  <div class="look"><button id="left" type="button" aria-label="Turn left">↶</button><button id="right" type="button" aria-label="Turn right">↷</button></div>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.min.js"></script>
+  <script>
+  (()=>{
+    'use strict';
+    const canvas=document.getElementById('game'),scene=new THREE.Scene();scene.background=new THREE.Color(0x07111f);scene.fog=new THREE.Fog(0x07111f,18,42);
+    const camera=new THREE.PerspectiveCamera(58,innerWidth/innerHeight,.1,100);const renderer=new THREE.WebGLRenderer({canvas,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+    scene.add(new THREE.HemisphereLight(0x9bdcff,0x182038,2.2));const sun=new THREE.DirectionalLight(0xffffff,2.5);sun.position.set(7,12,6);sun.castShadow=true;scene.add(sun);
+    const floor=new THREE.Mesh(new THREE.PlaneGeometry(32,24),new THREE.MeshStandardMaterial({color:0x162338,roughness:.9}));floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;scene.add(floor);
+    const grid=new THREE.GridHelper(32,32,0x2c5271,0x1b304b);grid.position.y=.012;scene.add(grid);
+    const walls=[];function wall(x,z,w,d){const m=new THREE.Mesh(new THREE.BoxGeometry(w,1.6,d),new THREE.MeshStandardMaterial({color:0x334b68,roughness:.75}));m.position.set(x,.8,z);m.castShadow=m.receiveShadow=true;scene.add(m);walls.push({x,z,w,d});}
+    wall(-5,-2,1,7);wall(1,-4,7,1);wall(5,2,1,7);wall(-1,4,7,1);wall(-1,-.5,3,1);wall(3,.5,1,3);
+    function crewmate(color){const g=new THREE.Group();const body=new THREE.Mesh(new THREE.CapsuleGeometry(.55,.75,8,16),new THREE.MeshStandardMaterial({color,roughness:.55}));body.position.y=.72;body.castShadow=true;g.add(body);const visor=new THREE.Mesh(new THREE.SphereGeometry(.32,16,10),new THREE.MeshStandardMaterial({color:0x9eeaff,metalness:.35,roughness:.2}));visor.scale.set(1,.65,.25);visor.position.set(0,1.02,.48);g.add(visor);return g}
+    const player=crewmate(0x39b8ff);scene.add(player);const enemy=crewmate(0xef4444);scene.add(enemy);const tasks=[{x:-6,z:-6,done:false},{x:6,z:-6,done:false},{x:6,z:6,done:false}];const taskMeshes=[];
+    tasks.forEach(t=>{const b=new THREE.Mesh(new THREE.OctahedronGeometry(.42),new THREE.MeshStandardMaterial({color:0x67e8f9,emissive:0x0891b2,emissiveIntensity:2}));b.position.set(t.x,.65,t.z);b.castShadow=true;scene.add(b);taskMeshes.push(b)});
+    const keys=new Set();let joy={x:0,y:0},angle=0,elapsed=0,ended=false,last=performance.now(),name=localStorage.getItem('missionName')||'Crewmate';document.getElementById('name').value=name;
+    function blocked(x,z){if(Math.abs(x)>15||Math.abs(z)>11)return true;return walls.some(a=>Math.abs(x-a.x)<a.w/2+.55&&Math.abs(z-a.z)<a.d/2+.55)}
+    function move(x,z){if(!blocked(player.position.x+x,player.position.z))player.position.x+=x;if(!blocked(player.position.x,player.position.z+z))player.position.z+=z}
+    function finish(title,text){ended=true;document.getElementById('status').textContent=title;document.getElementById('panelTitle').textContent=title;document.getElementById('panelText').textContent=text;document.getElementById('panel').classList.add('show')}
+    function reset(){player.position.set(-8,0,0);enemy.position.set(8,0,0);tasks.forEach(t=>t.done=false);taskMeshes.forEach(m=>m.visible=true);elapsed=0;ended=false;document.getElementById('panel').classList.remove('show');document.getElementById('status').textContent='Playing'}
+    function hud(){document.getElementById('tasks').textContent=`Tasks: ${tasks.filter(t=>t.done).length} / ${tasks.length}`;document.getElementById('time').textContent=`Time: ${Math.floor(elapsed)}s`}
+    function tick(now){const dt=Math.min((now-last)/1000,.05);last=now;if(!ended){elapsed+=dt;let x=(keys.has('d')||keys.has('ArrowRight')?1:0)-(keys.has('a')||keys.has('ArrowLeft')?1:0)+joy.x;let z=(keys.has('s')||keys.has('ArrowDown')?1:0)-(keys.has('w')||keys.has('ArrowUp')?1:0)+joy.y;const l=Math.hypot(x,z)||1;move(x/l*dt*5,z/l*dt*5);angle+=(keys.has('q')?-dt*2:0)+(keys.has('e')?dt*2:0);if(x||z)player.rotation.y=Math.atan2(x,z);const dx=player.position.x-enemy.position.x,dz=player.position.z-enemy.position.z,dl=Math.hypot(dx,dz)||1;enemy.position.x+=dx/dl*dt*1.35;enemy.position.z+=dz/dl*dt*1.35;if(dl<1.05)finish('Caught!','The impostor caught '+name+'.');tasks.forEach((t,i)=>{if(!t.done&&Math.hypot(player.position.x-t.x,player.position.z-t.z)<1){t.done=true;taskMeshes[i].visible=false}});if(tasks.every(t=>t.done))finish('Mission complete','Excellent work, '+name+'!');taskMeshes.forEach((m,i)=>{m.rotation.y+=dt*2;m.position.y=.65+Math.sin(now/300+i)*.08});hud()}
+      const camTarget=new THREE.Vector3(player.position.x,1.1,player.position.z);const camPos=new THREE.Vector3(player.position.x+Math.sin(angle)*8,6.8,player.position.z+Math.cos(angle)*8);camera.position.lerp(camPos,.1);camera.lookAt(camTarget);renderer.render(scene,camera);requestAnimationFrame(tick)}
+    addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});addEventListener('keydown',e=>{keys.add(e.key);if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault()});addEventListener('keyup',e=>keys.delete(e.key));
+    const joyEl=document.getElementById('joystick'),stick=document.getElementById('stick');function joyMove(e){const r=joyEl.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),d=Math.min(42,Math.hypot(dx,dy)),a=Math.atan2(dy,dx);joy={x:Math.cos(a)*d/42,y:Math.sin(a)*d/42};stick.style.transform=`translate(${joy.x*42}px,${joy.y*42}px)`}function joyEnd(){joy={x:0,y:0};stick.style.transform='translate(0,0)'}joyEl.addEventListener('pointerdown',e=>{joyEl.setPointerCapture(e.pointerId);joyMove(e)});joyEl.addEventListener('pointermove',e=>{if(e.buttons)joyMove(e)});joyEl.addEventListener('pointerup',joyEnd);joyEl.addEventListener('pointercancel',joyEnd);
+    document.getElementById('left').onclick=()=>angle-=.35;document.getElementById('right').onclick=()=>angle+=.35;document.getElementById('restart').onclick=reset;document.getElementById('help').onclick=()=>alert('Complete all three glowing cyan tasks. Avoid the red impostor. Use WASD, arrow keys, the joystick, or the turn buttons.');document.getElementById('saveName').onclick=()=>{name=document.getElementById('name').value.trim()||'Crewmate';localStorage.setItem('missionName',name)};document.getElementById('resetName').onclick=()=>{localStorage.removeItem('missionName');document.getElementById('name').value='';name='Crewmate'};
+    renderer.setSize(innerWidth,innerHeight);reset();requestAnimationFrame(tick);
+  })();
+  </script>
 </body>
 </html>
